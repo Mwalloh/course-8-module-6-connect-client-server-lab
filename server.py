@@ -38,6 +38,8 @@ def add_event():
         }
         events.append(new_event)
         return jsonify(new_event), 201
+    else:
+        return jsonify({'message': "404 Not Found"}), 404
         
 if __name__ == "__main__":
     app.run(debug=True)
