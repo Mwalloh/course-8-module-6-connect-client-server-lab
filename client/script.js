@@ -18,7 +18,7 @@ document.querySelector("form").addEventListener("submit", (e) => {
 		body: JSON.stringify({ title }),
 	})
 		.then((res) => res.json())
-		.then(renderEvent);
+		.then(title ? renderEvent : "");
 });
 
 function renderEvent(event) {
