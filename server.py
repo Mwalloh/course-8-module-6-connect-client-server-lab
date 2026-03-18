@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from data import events
 
 app = Flask(__name__)
 CORS(app)
@@ -9,9 +10,15 @@ CORS(app)
 
 # TASK: Create a route for "/"
 # This route should return a JSON welcome message
+@app.route('/', methods=['GET'])
+def welcome():
+    return jsonify({"message": 'Welcome!'}), 200
 
 # TASK: Create a GET route for "/events"
 # This route should return the full list of events as JSON
+@app.route('/events', methods=['GET'])
+def get_events():
+    return jsonify(events), 200
 
 # TASK: Create a POST route for "/events"
 # This route should:
@@ -20,6 +27,17 @@ CORS(app)
 # 3. Create a new event with a unique ID and the provided title
 # 4. Add the new event to the events list
 # 5. Return the new event with status code 201
-
+@app.route('/events', methods=['POST'])
+def add_event():
+    data = request.get_json()
+    if data['title']:
+        new_id = max((event['id'] for event in events), default=0) + 1
+        new_event = {
+            'id': new_id,
+            'title': data['title']
+        }
+        events.append(new_event)
+        return jsonify(new_event), 201
+        
 if __name__ == "__main__":
     app.run(debug=True)
